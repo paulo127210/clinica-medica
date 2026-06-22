@@ -47,7 +47,7 @@ export default function LoginPage() {
                 <Activity className="w-10 h-10 text-white"/>
               </div>
             </div>
-            <h1 className="text-2xl font-extrabold text-white">Clínica Médica</h1>
+            <h1 className="text-2xl font-extrabold text-white">Clínica Dr. Paulo</h1>
             <p className="text-green-200 text-sm mt-1">Sistema de Gestão</p>
           </div>
 
@@ -115,7 +115,7 @@ export default function LoginPage() {
           {/* Rodapé */}
           <div className="px-8 pb-6 text-center">
             <p className="text-xs text-gray-300">
-              Clínica Médica © {new Date().getFullYear()} · Sistema de Gestão
+              Clínica Dr. Paulo © {new Date().getFullYear()} · Sistema de Gestão
             </p>
           </div>
         </div>

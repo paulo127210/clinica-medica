@@ -34,7 +34,7 @@ export default function Sidebar() {
             <Activity className="w-6 h-6"/>
           </div>
           <div>
-            <h1 className="font-bold text-lg leading-tight text-white">Clínica Médica</h1>
+            <h1 className="font-bold text-lg leading-tight text-white">Clínica Dr. Paulo</h1>
             <p className="text-green-300 text-xs">Sistema de Gestão</p>
           </div>
         </div>

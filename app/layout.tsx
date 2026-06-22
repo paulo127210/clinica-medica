@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Clínica Médica",
-  description: "Sistema de Gestão - Clínica Médica",
+  title: "Clínica Dr. Paulo",
+  description: "Sistema de Gestão - Clínica Dr. Paulo",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
