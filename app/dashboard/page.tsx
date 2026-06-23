@@ -52,15 +52,13 @@ export default function DashboardPage() {
   return (
     <div className="p-8 space-y-8">
       {/* Hero Banner */}
-      <div className="rounded-3xl overflow-hidden shadow-xl">
-        <img src="/banner.jpg" alt="Clínica Dr. Paulo" className="w-full object-contain" />
-        <div className="bg-teal-600 px-8 py-5 flex items-center justify-between">
-          <p className="text-white font-semibold text-base">Agende sua consulta de forma rápida e fácil!</p>
-          <a href="/paciente/login"
-            className="bg-white hover:bg-gray-100 text-teal-700 font-bold px-8 py-3 rounded-full shadow text-sm uppercase tracking-widest transition whitespace-nowrap">
-            Agendar Consulta
-          </a>
-        </div>
+      <div className="rounded-3xl overflow-hidden shadow-xl relative" style={{maxHeight: '340px'}}>
+        <img src="/banner.jpg" alt="Clínica Dr. Paulo" className="w-full object-cover object-top" style={{maxHeight: '340px'}} />
+        {/* Botão invisível sobre o botão azul da imagem */}
+        <a href="/paciente/login"
+          className="absolute"
+          style={{left: '5%', top: '62%', width: '28%', height: '14%'}}
+          title="Agendar Consulta" />
       </div>
 
       {/* Stats Row 1 */}
