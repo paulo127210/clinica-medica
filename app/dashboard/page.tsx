@@ -54,11 +54,23 @@ export default function DashboardPage() {
       {/* Hero Banner */}
       <div className="rounded-3xl overflow-hidden shadow-xl relative" style={{maxHeight: '340px'}}>
         <img src="/banner.jpg" alt="Clínica Dr. Paulo" className="w-full object-cover object-top" style={{maxHeight: '340px'}} />
-        {/* Botão invisível sobre o botão azul da imagem */}
-        <a href="/paciente/login"
-          className="absolute"
-          style={{left: '5%', top: '62%', width: '28%', height: '14%'}}
-          title="Agendar Consulta" />
+        {/* Botão animado */}
+        <div className="absolute bottom-5 left-7">
+          <div className="relative inline-flex items-center">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-60"></span>
+            <a href="/paciente/agendar"
+              className="relative inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2.5 rounded-full shadow-xl text-xs uppercase tracking-widest transition"
+              style={{animation: 'agendarPulse 2s ease-in-out infinite'}}>
+              📅 Agendar Consulta
+            </a>
+          </div>
+        </div>
+        <style>{`
+          @keyframes agendarPulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37,99,235,0.5); }
+            50% { transform: scale(1.06); box-shadow: 0 0 0 10px rgba(37,99,235,0); }
+          }
+        `}</style>
       </div>
 
       {/* Stats Row 1 */}
