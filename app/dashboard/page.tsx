@@ -52,27 +52,13 @@ export default function DashboardPage() {
   return (
     <div className="p-8 space-y-8">
       {/* Hero Banner */}
-      <div className="rounded-3xl overflow-hidden bg-gradient-to-r from-green-700 via-green-600 to-teal-500 shadow-xl">
-        <div className="flex flex-col md:flex-row items-center">
-          <div className="flex-1 p-8 md:p-10">
-            <p className="text-green-200 text-sm font-semibold uppercase tracking-widest mb-2">Bem-vindo ao Sistema</p>
-            <h1 className="text-3xl md:text-4xl font-extrabold text-white leading-tight mb-3">
-              Clínica Dr. Paulo
-            </h1>
-            <p className="text-green-100 text-base max-w-md leading-relaxed">
-              Gerencie pacientes, consultas, prontuários e financeiro com praticidade e segurança.
-            </p>
-            <p className="mt-4 text-green-200 text-sm">
-              📅 {new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
-            </p>
-          </div>
-          <div className="w-full md:w-80 h-56 md:h-64 overflow-hidden">
-            <img
-              src="/medicos.jpg"
-              alt="Médicos da Clínica Dr. Paulo"
-              className="w-full h-full object-cover object-center"
-            />
-          </div>
+      <div className="rounded-3xl overflow-hidden shadow-xl relative">
+        <img src="/banner.jpg" alt="Clínica Dr. Paulo" className="w-full h-56 md:h-72 object-cover object-top" />
+        <div className="absolute inset-0 flex items-end p-6 md:p-10">
+          <a href="/paciente/login"
+            className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-full shadow-lg text-sm uppercase tracking-widest transition">
+            Agendar Consulta
+          </a>
         </div>
       </div>
 

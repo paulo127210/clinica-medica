@@ -7,6 +7,8 @@ export function middleware(request: NextRequest) {
 
   // Rotas públicas
   if (pathname.startsWith('/login')) return NextResponse.next()
+  if (pathname.startsWith('/paciente')) return NextResponse.next()
+  if (pathname.startsWith('/api/paciente')) return NextResponse.next()
 
   // Se não autenticado, redireciona para login
   if (!auth || auth.value !== 'autenticado') {
