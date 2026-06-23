@@ -17,7 +17,7 @@ export default function AgendarConsulta() {
     const p = sessionStorage.getItem('paciente')
     if (!p) { router.push('/paciente/login'); return }
     setPaciente(JSON.parse(p))
-    fetch('/api/dados?tabela=medicos&select=id,crm,especialidades(nome),funcionarios(nome)&order=id')
+    fetch('/api/dados?tabela=vw_producao_medicos&order=medico')
       .then(r => r.json()).then(j => setMedicos(j.data || []))
   }, [])
 
@@ -87,8 +87,8 @@ export default function AgendarConsulta() {
               className="w-full mt-1 px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white">
               <option value="">Selecione o médico...</option>
               {medicos.map(m => (
-                <option key={m.id} value={m.id}>
-                  Dr(a). {m.funcionarios?.nome} — {m.especialidades?.nome}
+                <option key={m.medico_id} value={m.medico_id}>
+                  {m.medico} — {m.especialidade}
                 </option>
               ))}
             </select>
