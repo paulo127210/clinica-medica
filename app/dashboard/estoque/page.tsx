@@ -1,6 +1,5 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { supabase } from '@/lib/supabase'
 import { Package, AlertTriangle, CheckCircle, Plus, Trash2, X } from 'lucide-react'
 
 interface Produto {
@@ -42,9 +41,9 @@ export default function EstoquePage() {
 
   async function carregar() {
     const [c, p, cat] = await Promise.all([
-      supabase.from('vw_estoque_critico').select('*'),
-      supabase.from('produtos').select('*, categorias_estoque(nome)').eq('ativo', true).order('nome').limit(100),
-      supabase.from('categorias_estoque').select('id, nome').order('nome'),
+      fetch('/api/dados?tabela=vw_estoque_critico').then(r => r.json()),
+      fetch('/api/dados?tabela=produtos&select=*,categorias_estoque(nome)&order=nome&limit=100').then(r => r.json()),
+      fetch('/api/dados?tabela=categorias_estoque&order=nome').then(r => r.json()),
     ])
     setCritico(c.data || [])
     setProdutos(p.data || [])
@@ -65,19 +64,24 @@ export default function EstoquePage() {
     if (!form.categoria_id) { setErro('Selecione uma categoria.'); return }
     setSalvando(true)
     setErro('')
-    const { error } = await supabase.from('produtos').insert({
-      nome:           form.nome.trim(),
-      categoria_id:   Number(form.categoria_id),
-      unidade:        form.unidade || 'UN',
-      estoque_minimo: Number(form.estoque_minimo) || 0,
-      estoque_atual:  Number(form.estoque_atual)  || 0,
-      valor_custo:    Number(form.valor_custo)    || 0,
-      valor_venda:    Number(form.valor_venda)    || 0,
-      codigo_barras:  form.codigo_barras.trim() || null,
-      ativo:          true,
+    const res = await fetch('/api/dados?tabela=produtos', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        nome:           form.nome.trim(),
+        categoria_id:   Number(form.categoria_id),
+        unidade:        form.unidade || 'UN',
+        estoque_minimo: Number(form.estoque_minimo) || 0,
+        estoque_atual:  Number(form.estoque_atual)  || 0,
+        valor_custo:    Number(form.valor_custo)    || 0,
+        valor_venda:    Number(form.valor_venda)    || 0,
+        codigo_barras:  form.codigo_barras.trim() || null,
+        ativo:          true,
+      }),
     })
+    const json = await res.json()
     setSalvando(false)
-    if (error) { setErro('Erro ao salvar: ' + error.message); return }
+    if (json.erro) { setErro('Erro ao salvar: ' + json.erro); return }
     setModalAberto(false)
     carregar()
   }
@@ -85,7 +89,11 @@ export default function EstoquePage() {
   async function excluir(id: number) {
     if (!confirm('Excluir este produto do estoque?')) return
     setExcluindo(id)
-    await supabase.from('produtos').update({ ativo: false }).eq('id', id)
+    await fetch(`/api/dados?tabela=produtos&id=${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ativo: false }),
+    })
     setExcluindo(null)
     carregar()
   }

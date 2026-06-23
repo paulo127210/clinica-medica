@@ -1,6 +1,5 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { supabase } from '@/lib/supabase'
 import { FileText, Search, Calendar, User } from 'lucide-react'
 
 export default function ProntuariosPage() {
@@ -11,12 +10,9 @@ export default function ProntuariosPage() {
   useEffect(() => {
     async function load() {
       setLoading(true)
-      const { data } = await supabase
-        .from('prontuarios')
-        .select('*, pacientes(nome, cpf), medicos(crm, funcionarios(nome)), consultas(data_hora, status)')
-        .order('criado_em', { ascending: false })
-        .limit(30)
-      setProntuarios(data || [])
+      const res = await fetch('/api/dados?tabela=prontuarios&select=*,pacientes(nome,cpf),medicos(crm,funcionarios(nome)),consultas(data_hora,status)&order=id&asc=false&limit=30')
+      const json = await res.json()
+      setProntuarios(json.data || [])
       setLoading(false)
     }
     load()

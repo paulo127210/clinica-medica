@@ -1,6 +1,5 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { supabase } from '@/lib/supabase'
 import { UserRound, TrendingUp, Plus, X, Search } from 'lucide-react'
 
 const especialidades = [
@@ -21,23 +20,21 @@ const formVazio = {
 }
 
 export default function MedicosPage() {
-  const [medicos, setMedicos]     = useState<any[]>([])
-  const [loading, setLoading]     = useState(true)
-  const [showForm, setShowForm]   = useState(false)
-  const [saving, setSaving]       = useState(false)
-  const [search, setSearch]       = useState('')
-  const [form, setForm]           = useState(formVazio)
-  const [erro, setErro]           = useState('')
+  const [medicos, setMedicos]   = useState<any[]>([])
+  const [loading, setLoading]   = useState(true)
+  const [showForm, setShowForm] = useState(false)
+  const [saving, setSaving]     = useState(false)
+  const [search, setSearch]     = useState('')
+  const [form, setForm]         = useState(formVazio)
+  const [erro, setErro]         = useState('')
 
   const fmt = (v: number) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v || 0)
 
   async function load() {
     setLoading(true)
-    const { data } = await supabase
-      .from('vw_producao_medicos')
-      .select('*')
-      .order('medico')
-    setMedicos(data || [])
+    const res = await fetch('/api/dados?tabela=vw_producao_medicos&order=medico')
+    const json = await res.json()
+    setMedicos(json.data || [])
     setLoading(false)
   }
 
@@ -55,59 +52,17 @@ export default function MedicosPage() {
       return
     }
     setSaving(true)
-    try {
-      // 1. Cria usuário
-      const { data: usuData, error: usuErr } = await supabase
-        .from('usuarios')
-        .insert([{
-          perfil_id: 2,
-          nome: form.nome,
-          email: form.email || `${form.crm.toLowerCase().replace(/[^a-z0-9]/g,'')}@clinica.com`,
-          senha_hash: 'hash_placeholder',
-          salt: 'salt_placeholder',
-        }])
-        .select('id')
-        .single()
-      if (usuErr) throw new Error('Erro ao criar usuário: ' + usuErr.message)
-
-      // 2. Cria funcionário
-      const { data: funcData, error: funcErr } = await supabase
-        .from('funcionarios')
-        .insert([{
-          usuario_id: usuData.id,
-          cargo_id: 1,
-          nome: form.nome,
-          cpf: form.cpf || null,
-          celular: form.celular || null,
-          data_nascimento: form.data_nascimento,
-          sexo: form.sexo,
-          data_admissao: form.data_admissao,
-          salario: parseFloat(form.salario) || 15000,
-        }])
-        .select('id')
-        .single()
-      if (funcErr) throw new Error('Erro ao criar funcionário: ' + funcErr.message)
-
-      // 3. Cria médico
-      const { error: medErr } = await supabase
-        .from('medicos')
-        .insert([{
-          funcionario_id: funcData.id,
-          especialidade_id: parseInt(form.especialidade_id),
-          crm: form.crm,
-          crm_estado: form.crm_estado,
-          valor_consulta: parseFloat(form.valor_consulta),
-          percentual_repasse: parseFloat(form.percentual_repasse) || 60,
-        }])
-      if (medErr) throw new Error('Erro ao criar médico: ' + medErr.message)
-
-      setShowForm(false)
-      setForm(formVazio)
-      load()
-    } catch (e: any) {
-      setErro(e.message)
-    }
+    const res = await fetch('/api/medicos', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(form),
+    })
+    const json = await res.json()
     setSaving(false)
+    if (json.erro) { setErro(json.erro); return }
+    setShowForm(false)
+    setForm(formVazio)
+    load()
   }
 
   const campo = (label: string, key: keyof typeof formVazio, type = 'text', required = false) => (
@@ -188,7 +143,6 @@ export default function MedicosPage() {
         </div>
       )}
 
-      {/* MODAL CADASTRO */}
       {showForm && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 overflow-y-auto">
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl my-8">
@@ -205,7 +159,6 @@ export default function MedicosPage() {
             </div>
 
             <div className="p-6 space-y-5">
-              {/* Dados pessoais */}
               <div>
                 <p className="text-xs font-bold text-green-700 uppercase tracking-widest mb-3 flex items-center gap-2">
                   <span className="w-5 h-5 bg-green-600 text-white rounded-full flex items-center justify-center text-xs">1</span>
@@ -229,7 +182,6 @@ export default function MedicosPage() {
                 </div>
               </div>
 
-              {/* Dados profissionais */}
               <div>
                 <p className="text-xs font-bold text-green-700 uppercase tracking-widest mb-3 flex items-center gap-2">
                   <span className="w-5 h-5 bg-green-600 text-white rounded-full flex items-center justify-center text-xs">2</span>
@@ -261,9 +213,7 @@ export default function MedicosPage() {
               </div>
 
               {erro && (
-                <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-xl p-3">
-                  {erro}
-                </div>
+                <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-xl p-3">{erro}</div>
               )}
             </div>
 

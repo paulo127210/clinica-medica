@@ -1,7 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { supabase } from '@/lib/supabase'
-import { Briefcase, Plus, X, Search, User } from 'lucide-react'
+import { Briefcase, Plus, X, Search } from 'lucide-react'
 
 const cargos = [
   { id: 1, nome: 'Médico' }, { id: 2, nome: 'Enfermeiro' },
@@ -29,12 +28,9 @@ export default function FuncionariosPage() {
 
   async function load() {
     setLoading(true)
-    const { data } = await supabase
-      .from('funcionarios')
-      .select('*, cargos(nome), usuarios(email)')
-      .order('nome')
-      .limit(100)
-    setLista(data || [])
+    const res = await fetch('/api/dados?tabela=funcionarios&select=*,cargos(nome),usuarios(email)&order=nome')
+    const json = await res.json()
+    setLista(json.data || [])
     setLoading(false)
   }
 
@@ -53,38 +49,17 @@ export default function FuncionariosPage() {
       return
     }
     setSaving(true)
-    try {
-      // 1. Cria usuário
-      const email = form.email || `${form.nome.toLowerCase().replace(/\s+/g,'.').normalize('NFD').replace(/[̀-ͯ]/g,'')}@clinica.com`
-      const { data: usu, error: eUsu } = await supabase
-        .from('usuarios')
-        .insert([{ perfil_id: 3, nome: form.nome, email, senha_hash: 'hash_placeholder', salt: 'salt_placeholder' }])
-        .select('id').single()
-      if (eUsu) throw new Error(eUsu.message)
-
-      // 2. Cria funcionário
-      const { error: eFunc } = await supabase
-        .from('funcionarios')
-        .insert([{
-          usuario_id: usu.id,
-          cargo_id: parseInt(form.cargo_id),
-          nome: form.nome,
-          cpf: form.cpf || null,
-          celular: form.celular || null,
-          data_nascimento: form.data_nascimento,
-          sexo: form.sexo,
-          data_admissao: form.data_admissao,
-          salario: parseFloat(form.salario) || null,
-        }])
-      if (eFunc) throw new Error(eFunc.message)
-
-      setShowForm(false)
-      setForm(formVazio)
-      load()
-    } catch (e: any) {
-      setErro('Erro: ' + e.message)
-    }
+    const res = await fetch('/api/funcionarios', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(form),
+    })
+    const json = await res.json()
     setSaving(false)
+    if (json.erro) { setErro('Erro: ' + json.erro); return }
+    setShowForm(false)
+    setForm(formVazio)
+    load()
   }
 
   const input = (label: string, key: keyof typeof formVazio, type = 'text', req = false) => (
@@ -97,10 +72,8 @@ export default function FuncionariosPage() {
   )
 
   const corCargo: Record<number, string> = {
-    1: 'bg-blue-100 text-blue-700',
-    2: 'bg-teal-100 text-teal-700',
-    3: 'bg-cyan-100 text-cyan-700',
-    4: 'bg-purple-100 text-purple-700',
+    1: 'bg-blue-100 text-blue-700', 2: 'bg-teal-100 text-teal-700',
+    3: 'bg-cyan-100 text-cyan-700', 4: 'bg-purple-100 text-purple-700',
     5: 'bg-orange-100 text-orange-700',
   }
 
@@ -176,7 +149,6 @@ export default function FuncionariosPage() {
         </div>
       )}
 
-      {/* MODAL */}
       {showForm && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 overflow-y-auto">
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-xl my-8">
@@ -220,9 +192,7 @@ export default function FuncionariosPage() {
               </div>
 
               {erro && (
-                <div className="mt-4 bg-red-50 border border-red-200 text-red-600 text-sm rounded-xl p-3">
-                  {erro}
-                </div>
+                <div className="mt-4 bg-red-50 border border-red-200 text-red-600 text-sm rounded-xl p-3">{erro}</div>
               )}
             </div>
 

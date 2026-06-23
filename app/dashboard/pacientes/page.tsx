@@ -1,6 +1,5 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { supabase } from '@/lib/supabase'
 import { Search, Plus, User, Phone, Calendar } from 'lucide-react'
 
 export default function PacientesPage() {
@@ -13,10 +12,9 @@ export default function PacientesPage() {
 
   async function load() {
     setLoading(true)
-    let q = supabase.from('pacientes').select('*').eq('ativo', true).order('nome')
-    if (search) q = q.ilike('nome', `%${search}%`)
-    const { data } = await q.limit(50)
-    setPacientes(data || [])
+    const res = await fetch(`/api/dados?tabela=pacientes&select=*&busca=${encodeURIComponent(search)}`)
+    const json = await res.json()
+    setPacientes(json.data || [])
     setLoading(false)
   }
 
@@ -25,9 +23,14 @@ export default function PacientesPage() {
   async function salvar() {
     if (!form.nome || !form.data_nascimento) return alert('Preencha nome e data de nascimento.')
     setSaving(true)
-    const { error } = await supabase.from('pacientes').insert([{ ...form, sexo: form.sexo as any }])
+    const res = await fetch('/api/dados?tabela=pacientes', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...form, ativo: true }),
+    })
+    const json = await res.json()
     setSaving(false)
-    if (error) return alert('Erro: ' + error.message)
+    if (json.erro) return alert('Erro: ' + json.erro)
     setShowForm(false)
     setForm({ nome: '', cpf: '', data_nascimento: '', sexo: 'M', celular: '', email: '' })
     load()

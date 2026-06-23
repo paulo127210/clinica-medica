@@ -1,6 +1,5 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { supabase } from '@/lib/supabase'
 import { Calendar, Clock, User, UserRound, MapPin } from 'lucide-react'
 
 const statusColor: Record<string, string> = {
@@ -20,13 +19,10 @@ export default function AgendaPage() {
   useEffect(() => {
     async function load() {
       setLoading(true)
-      const { data: rows } = await supabase
-        .from('vw_agenda_diaria')
-        .select('*')
-        .gte('data_hora', `${data}T00:00:00`)
-        .lte('data_hora', `${data}T23:59:59`)
-        .order('data_hora')
-      setConsultas(rows || [])
+      const url = `/api/dados?tabela=vw_agenda_diaria&order=data_hora&gte=data_hora=${data}T00:00:00&lte=data_hora=${data}T23:59:59`
+      const res = await fetch(url)
+      const json = await res.json()
+      setConsultas(json.data || [])
       setLoading(false)
     }
     load()

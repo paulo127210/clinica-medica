@@ -1,6 +1,5 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { supabase } from '@/lib/supabase'
 import { Users, UserRound, Calendar, DollarSign, AlertTriangle, TrendingUp, Activity, Package } from 'lucide-react'
 
 interface Dashboard {
@@ -332,10 +331,9 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    supabase.from('vw_dashboard').select('*').single().then(({ data }) => {
-      setData(data)
-      setLoading(false)
-    })
+    fetch('/api/dados?tabela=vw_dashboard&limit=1')
+      .then(r => r.json())
+      .then(json => { setData(json.data?.[0] ?? null); setLoading(false) })
   }, [])
 
   const fmt = (v: number) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v || 0)
@@ -410,7 +408,9 @@ export default function DashboardPage() {
 function AgendaHoje() {
   const [consultas, setConsultas] = useState<any[]>([])
   useEffect(() => {
-    supabase.from('vw_agenda_diaria').select('*').limit(8).then(({ data }) => setConsultas(data || []))
+    const hoje = new Date().toISOString().split('T')[0]
+    fetch(`/api/dados?tabela=vw_agenda_diaria&order=data_hora&gte=data_hora=${hoje}T00:00:00&lte=data_hora=${hoje}T23:59:59&limit=8`)
+      .then(r => r.json()).then(json => setConsultas(json.data || []))
   }, [])
 
   const statusColor: Record<string, string> = {
@@ -449,7 +449,8 @@ function AgendaHoje() {
 function EstoqueCritico() {
   const [itens, setItens] = useState<any[]>([])
   useEffect(() => {
-    supabase.from('vw_estoque_critico').select('*').limit(6).then(({ data }) => setItens(data || []))
+    fetch('/api/dados?tabela=vw_estoque_critico&limit=6')
+      .then(r => r.json()).then(json => setItens(json.data || []))
   }, [])
 
   if (!itens.length) return (

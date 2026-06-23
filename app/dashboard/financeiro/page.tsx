@@ -1,12 +1,11 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { supabase } from '@/lib/supabase'
 import { DollarSign, TrendingUp, AlertCircle, CheckCircle } from 'lucide-react'
 
 export default function FinanceiroPage() {
   const [mensal, setMensal]         = useState<any[]>([])
   const [inadimplencia, setInad]    = useState<any[]>([])
-  const [formas, setFormas]         = useState<any[]>([])
+  const [_formas, setFormas]        = useState<any[]>([])
   const [loading, setLoading]       = useState(true)
 
   const fmt = (v: number) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v || 0)
@@ -14,9 +13,9 @@ export default function FinanceiroPage() {
   useEffect(() => {
     async function load() {
       const [m, i, f] = await Promise.all([
-        supabase.from('vw_financeiro_mensal').select('*').limit(6),
-        supabase.from('vw_inadimplencia').select('*').limit(10),
-        supabase.from('vw_pagamentos_por_forma').select('*').limit(10),
+        fetch('/api/dados?tabela=vw_financeiro_mensal&limit=6').then(r => r.json()),
+        fetch('/api/dados?tabela=vw_inadimplencia&limit=10').then(r => r.json()),
+        fetch('/api/dados?tabela=vw_pagamentos_por_forma&limit=10').then(r => r.json()),
       ])
       setMensal(m.data || [])
       setInad(i.data || [])
