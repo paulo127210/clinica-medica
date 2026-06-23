@@ -53,7 +53,7 @@ export default function DashboardPage() {
     <div className="p-8 space-y-8">
       {/* Hero Banner */}
       <div className="rounded-3xl overflow-hidden shadow-xl relative">
-        <img src="/banner.jpg" alt="Clínica Dr. Paulo" className="w-full h-56 md:h-72 object-cover object-top" />
+        <img src="/banner.jpg" alt="Clínica Dr. Paulo" className="w-full object-contain" />
         <div className="absolute inset-0 flex items-end p-6 md:p-10">
           <a href="/paciente/login"
             className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-full shadow-lg text-sm uppercase tracking-widest transition">
