@@ -58,17 +58,7 @@ export default function DashboardPage() {
 
       {/* Stats Row 1 */}
       <div>
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-blue-900 font-bold text-lg">Resumo Geral</h2>
-          <div className="relative inline-flex items-center">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-60"></span>
-            <a href="/paciente/agendar"
-              className="relative inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2.5 rounded-full shadow-xl text-xs uppercase tracking-widest transition"
-              style={{animation: 'agendarPulse 2s ease-in-out infinite'}}>
-              📅 Agendar Consulta
-            </a>
-          </div>
-        </div>
+        <h2 className="text-blue-900 font-bold text-lg mb-4">Resumo Geral</h2>
         <style>{`
           @keyframes agendarPulse {
             0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37,99,235,0.5); }
@@ -80,6 +70,18 @@ export default function DashboardPage() {
           <StatCard title="Médicos Ativos"       value={data?.total_medicos ?? 0}    icon={UserRound}  bg="bg-gradient-to-br from-green-700 to-green-500"  />
           <StatCard title="Consultas Hoje"       value={data?.consultas_hoje ?? 0}   icon={Calendar}   bg="bg-gradient-to-br from-teal-700 to-teal-500"    sub={`${data?.atendimentos_hoje ?? 0} realizadas`} />
           <StatCard title="Receita do Mês"       value={fmt(data?.receita_mes ?? 0)} icon={TrendingUp} bg="bg-gradient-to-br from-emerald-700 to-emerald-500" sub={`Hoje: ${fmt(data?.receita_hoje ?? 0)}`} />
+        </div>
+      </div>
+
+      {/* Botão Agendar Consulta centralizado */}
+      <div className="flex justify-center py-2">
+        <div className="relative inline-flex items-center">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-60"></span>
+          <a href="/paciente/agendar"
+            className="relative inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-3.5 rounded-full shadow-xl text-sm uppercase tracking-widest transition"
+            style={{animation: 'agendarPulse 2s ease-in-out infinite'}}>
+            📅 Agendar Consulta
+          </a>
         </div>
       </div>
 
