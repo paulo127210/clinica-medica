@@ -52,10 +52,14 @@ export default function DashboardPage() {
   return (
     <div className="p-8 space-y-8">
       {/* Hero Banner */}
-      <div className="rounded-3xl overflow-hidden shadow-xl relative" style={{maxHeight: '340px'}}>
+      <div className="rounded-3xl overflow-hidden shadow-xl">
         <img src="/banner.jpg" alt="Clínica Dr. Paulo" className="w-full object-cover object-top" style={{maxHeight: '340px'}} />
-        {/* Botão animado */}
-        <div className="absolute bottom-5 left-7">
+      </div>
+
+      {/* Stats Row 1 */}
+      <div>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-blue-900 font-bold text-lg">Resumo Geral</h2>
           <div className="relative inline-flex items-center">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-60"></span>
             <a href="/paciente/agendar"
@@ -71,11 +75,6 @@ export default function DashboardPage() {
             50% { transform: scale(1.06); box-shadow: 0 0 0 10px rgba(37,99,235,0); }
           }
         `}</style>
-      </div>
-
-      {/* Stats Row 1 */}
-      <div>
-        <h2 className="text-blue-900 font-bold text-lg mb-4">Resumo Geral</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <StatCard title="Total de Pacientes"  value={data?.total_pacientes ?? 0}  icon={Users}      bg="bg-gradient-to-br from-blue-700 to-blue-500"   />
           <StatCard title="Médicos Ativos"       value={data?.total_medicos ?? 0}    icon={UserRound}  bg="bg-gradient-to-br from-green-700 to-green-500"  />
