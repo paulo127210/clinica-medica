@@ -113,25 +113,33 @@ export default function EstoquePage() {
         </button>
       </div>
 
-      {critico.length > 0 && (
-        <div className="mb-6 bg-red-50 border border-red-200 rounded-xl p-5">
-          <h3 className="font-semibold text-red-700 flex items-center gap-2 mb-3">
-            <AlertTriangle className="w-5 h-5" /> Produtos em Estoque Crítico
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {critico.map((item, i) => (
-              <div key={i} className="bg-white rounded-lg p-4 border border-red-100 flex items-center justify-between">
+      {/* Alerta de produtos abaixo do mínimo (estoque_atual <= 10) */}
+      {produtos.filter(p => p.estoque_atual <= p.estoque_minimo).length > 0 && (
+        <div className="mb-6 bg-red-600 rounded-2xl p-5 shadow-lg animate-pulse-once">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="bg-white/20 p-2 rounded-xl">
+              <AlertTriangle className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h3 className="font-extrabold text-white text-base">⚠️ ALERTA DE COMPRAS — Estoque Crítico!</h3>
+              <p className="text-red-100 text-xs">{produtos.filter(p => p.estoque_atual <= p.estoque_minimo).length} produto(s) abaixo do estoque mínimo de 10 unidades. Solicite reposição!</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            {produtos.filter(p => p.estoque_atual <= p.estoque_minimo).map((item) => (
+              <div key={item.id} className="bg-white rounded-xl p-4 flex items-center justify-between">
                 <div>
-                  <p className="font-medium text-gray-800 text-sm">{item.nome}</p>
-                  <p className="text-xs text-gray-400">{item.categoria} · {item.fornecedor || 'Sem fornecedor'}</p>
+                  <p className="font-bold text-gray-800 text-sm">{item.nome}</p>
+                  <p className="text-xs text-gray-400">{item.categorias_estoque?.nome || 'Sem categoria'}</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm font-bold text-red-600">{item.estoque_atual} {item.unidade}</p>
+                  <p className="text-lg font-extrabold text-red-600">{item.estoque_atual}</p>
                   <p className="text-xs text-gray-400">mín: {item.estoque_minimo}</p>
                 </div>
               </div>
             ))}
           </div>
+          <p className="text-red-100 text-xs mt-3 text-center">🛒 Entre em contato com o fornecedor para repor o estoque imediatamente.</p>
         </div>
       )}
 
