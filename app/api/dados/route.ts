@@ -39,7 +39,8 @@ export async function GET(req: NextRequest) {
     if (lte) { const [col, val] = lte.split('='); if (col && val) q = q.lte(col, val) }
 
     const asc = p.get('asc') // se "false", descending
-    q = q.order(order, { ascending: asc !== 'false' }).limit(limit)
+    if (order !== 'none') q = q.order(order, { ascending: asc !== 'false' })
+    q = q.limit(limit)
 
     const { data, error } = await q
     if (error) return NextResponse.json({ erro: error.message }, { status: 500 })

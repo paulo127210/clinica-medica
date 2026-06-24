@@ -36,7 +36,7 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetch('/api/dados?tabela=vw_dashboard&limit=1')
+    fetch('/api/dados?tabela=vw_dashboard&limit=1&order=total_pacientes')
       .then(r => r.json())
       .then(json => { setData(json.data?.[0] ?? null); setLoading(false) })
   }, [])
