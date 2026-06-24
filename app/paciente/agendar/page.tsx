@@ -89,7 +89,7 @@ export default function AgendarConsulta() {
 
   const Header = ({ titulo, sub }: { titulo: string; sub?: string }) => (
     <div className="mb-6">
-      <img src="/banner.jpg" alt="Clínica Dr. Paulo" className="w-full h-20 object-cover object-top rounded-2xl mb-4" />
+      <img src="/banner.jpg" alt="Clínica Dr. Paulo" className="w-full object-contain rounded-2xl mb-4" />
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-lg font-extrabold text-gray-800">{titulo}</h1>

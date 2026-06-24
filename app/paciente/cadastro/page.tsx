@@ -38,7 +38,7 @@ export default function CadastroPaciente() {
     <div className="min-h-screen bg-gradient-to-br from-teal-500 to-blue-600 flex items-center justify-center p-4">
       <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md p-8">
         <div className="text-center mb-6">
-          <img src="/banner.jpg" alt="Clínica Dr. Paulo" className="w-full h-28 object-cover object-top rounded-2xl mb-4" />
+          <img src="/banner.jpg" alt="Clínica Dr. Paulo" className="w-full object-contain rounded-2xl mb-4" />
           <h1 className="text-2xl font-extrabold text-gray-800">Novo Cadastro</h1>
           <p className="text-gray-500 text-sm mt-1">Seu CPF será o login e sua data de nascimento a senha</p>
         </div>

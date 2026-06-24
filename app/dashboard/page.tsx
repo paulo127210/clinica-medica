@@ -53,7 +53,7 @@ export default function DashboardPage() {
     <div className="p-8 space-y-8">
       {/* Hero Banner */}
       <div className="rounded-3xl overflow-hidden shadow-xl">
-        <img src="/banner.jpg" alt="Clínica Dr. Paulo" className="w-full object-cover object-top" style={{maxHeight: '340px'}} />
+        <img src="/banner.jpg" alt="Clínica Dr. Paulo" className="w-full object-contain" />
       </div>
 
       {/* Stats Row 1 */}
