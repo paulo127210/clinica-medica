@@ -56,31 +56,34 @@ export default function DashboardPage() {
         <img src="/banner.jpg" alt="Clínica Dr. Paulo" className="w-full object-cover object-top" style={{maxHeight: '340px'}} />
       </div>
 
-      {/* Stats Row 1 */}
-      <div>
-        <h2 className="text-blue-900 font-bold text-lg mb-4">Resumo Geral</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <StatCard title="Total de Pacientes"  value={data?.total_pacientes ?? 0}  icon={Users}      bg="bg-gradient-to-br from-blue-700 to-blue-500"   />
-          <StatCard title="Médicos Ativos"       value={data?.total_medicos ?? 0}    icon={UserRound}  bg="bg-gradient-to-br from-green-700 to-green-500"  />
-          <StatCard title="Consultas Hoje"       value={data?.consultas_hoje ?? 0}   icon={Calendar}   bg="bg-gradient-to-br from-teal-700 to-teal-500"    sub={`${data?.atendimentos_hoje ?? 0} realizadas`} />
-          <StatCard title="Receita do Mês"       value={fmt(data?.receita_mes ?? 0)} icon={TrendingUp} bg="bg-gradient-to-br from-emerald-700 to-emerald-500" sub={`Hoje: ${fmt(data?.receita_hoje ?? 0)}`} />
-        </div>
-      </div>
-
-      {/* Botão Agendar Consulta — centralizado */}
+      {/* Stats Row 1 + botão no meio */}
       <style>{`
         @keyframes agendarPulse {
           0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37,99,235,0.5); }
-          50% { transform: scale(1.06); box-shadow: 0 0 0 12px rgba(37,99,235,0); }
+          50% { transform: scale(1.08); box-shadow: 0 0 0 14px rgba(37,99,235,0); }
         }
       `}</style>
-      <div style={{width: '100%', textAlign: 'center', padding: '8px 0'}}>
-        <div style={{display: 'inline-block', position: 'relative'}}>
-          <span className="animate-ping" style={{position:'absolute',inset:0,borderRadius:'9999px',background:'#60a5fa',opacity:0.6,display:'inline-flex'}}></span>
-          <a href="/paciente/agendar"
-            style={{animation: 'agendarPulse 2s ease-in-out infinite', position:'relative', display:'inline-flex', alignItems:'center', gap:'8px', background:'#2563eb', color:'white', fontWeight:'bold', padding:'14px 36px', borderRadius:'9999px', fontSize:'14px', letterSpacing:'0.1em', textTransform:'uppercase', textDecoration:'none', boxShadow:'0 8px 24px rgba(37,99,235,0.4)'}}>
-            📅 Agendar Consulta
-          </a>
+      <div>
+        <h2 className="text-blue-900 font-bold text-lg mb-4">Resumo Geral</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          <StatCard title="Total de Pacientes" value={data?.total_pacientes ?? 0} icon={Users}     bg="bg-gradient-to-br from-blue-700 to-blue-500" />
+          <StatCard title="Médicos Ativos"      value={data?.total_medicos ?? 0}  icon={UserRound} bg="bg-gradient-to-br from-green-700 to-green-500" />
+
+          {/* Botão centralizado entre Médicos Ativos e Consultas Hoje */}
+          <div className="flex items-center justify-center">
+            <div className="relative inline-flex">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-60"></span>
+              <a href="/paciente/agendar"
+                className="relative inline-flex flex-col items-center justify-center gap-1 bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-4 rounded-2xl shadow-xl text-xs uppercase tracking-wide transition w-full"
+                style={{animation: 'agendarPulse 2s ease-in-out infinite', minWidth:'130px'}}>
+                <span className="text-3xl">📅</span>
+                <span>Agendar<br/>Consulta</span>
+              </a>
+            </div>
+          </div>
+
+          <StatCard title="Consultas Hoje"  value={data?.consultas_hoje ?? 0}   icon={Calendar}   bg="bg-gradient-to-br from-teal-700 to-teal-500"     sub={`${data?.atendimentos_hoje ?? 0} realizadas`} />
+          <StatCard title="Receita do Mês"  value={fmt(data?.receita_mes ?? 0)} icon={TrendingUp} bg="bg-gradient-to-br from-emerald-700 to-emerald-500" sub={`Hoje: ${fmt(data?.receita_hoje ?? 0)}`} />
         </div>
       </div>
 
