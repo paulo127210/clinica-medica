@@ -59,12 +59,6 @@ export default function DashboardPage() {
       {/* Stats Row 1 */}
       <div>
         <h2 className="text-blue-900 font-bold text-lg mb-4">Resumo Geral</h2>
-        <style>{`
-          @keyframes agendarPulse {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37,99,235,0.5); }
-            50% { transform: scale(1.06); box-shadow: 0 0 0 10px rgba(37,99,235,0); }
-          }
-        `}</style>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <StatCard title="Total de Pacientes"  value={data?.total_pacientes ?? 0}  icon={Users}      bg="bg-gradient-to-br from-blue-700 to-blue-500"   />
           <StatCard title="Médicos Ativos"       value={data?.total_medicos ?? 0}    icon={UserRound}  bg="bg-gradient-to-br from-green-700 to-green-500"  />
@@ -73,13 +67,18 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Botão Agendar Consulta centralizado */}
-      <div className="flex justify-center py-2">
-        <div className="relative inline-flex items-center">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-60"></span>
+      {/* Botão Agendar Consulta — centralizado */}
+      <style>{`
+        @keyframes agendarPulse {
+          0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37,99,235,0.5); }
+          50% { transform: scale(1.06); box-shadow: 0 0 0 12px rgba(37,99,235,0); }
+        }
+      `}</style>
+      <div style={{width: '100%', textAlign: 'center', padding: '8px 0'}}>
+        <div style={{display: 'inline-block', position: 'relative'}}>
+          <span className="animate-ping" style={{position:'absolute',inset:0,borderRadius:'9999px',background:'#60a5fa',opacity:0.6,display:'inline-flex'}}></span>
           <a href="/paciente/agendar"
-            className="relative inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-3.5 rounded-full shadow-xl text-sm uppercase tracking-widest transition"
-            style={{animation: 'agendarPulse 2s ease-in-out infinite'}}>
+            style={{animation: 'agendarPulse 2s ease-in-out infinite', position:'relative', display:'inline-flex', alignItems:'center', gap:'8px', background:'#2563eb', color:'white', fontWeight:'bold', padding:'14px 36px', borderRadius:'9999px', fontSize:'14px', letterSpacing:'0.1em', textTransform:'uppercase', textDecoration:'none', boxShadow:'0 8px 24px rgba(37,99,235,0.4)'}}>
             📅 Agendar Consulta
           </a>
         </div>
